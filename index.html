@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fauna - Biodiversity Explorer</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400;1,9..40,500;1,9..40,600&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="global-noise"></div>
+  <!-- Noise Texture SVG Def -->
+  <svg width="0" height="0" class="hidden-svg">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+  </svg>
+
+  <main class="main-wrapper">
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <div class="video-container">
+        <video id="bg-video" 
+               src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260329_050842_be71947f-f16e-4a14-810c-06e83d23ddb5.mp4" 
+               muted playsinline preload="auto">
+        </video>
+        <div class="video-overlay"></div>
+      </div>
+
+      <nav class="navbar">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--fauna-amber)"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 7.05,10.62 11,10.62C14.5,10.62 17,8 17,8Z" /></svg>
+          <span>Fauna</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#explore">Explore</a></li>
+          <li><a href="#map">Map</a></li>
+          <li><a href="#sightings">Sightings</a></li>
+          <li><a href="#journal">Journal</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="btn-outline">Log Sighting</button>
+          <button class="btn-primary">Begin Exploring</button>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <div class="badge-component">
+          <div class="badge-dark">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="var(--fauna-amber)"><path d="M21 21l-3.3-3.3c.7-.8 1.1-1.9 1.1-3 0-2.8-2.2-5-5-5s-5 2.2-5 5 2.2 5 5 5c1.1 0 2.2-.4 3-1.1L21 21zm-6.3-5.3c-.8.8-2 1.1-3 .8-.5-.2-1-.5-1.3-1-.6-1-.5-2.2.3-3 .8-.8 2-1.1 3-.8.5.2 1 .5 1.3 1 .6 1 .5 2.2-.3 3z"/></svg>
+            <span>New</span>
+          </div>
+          <div class="badge-light">Discover wildlife around you</div>
+        </div>
+
+        <h1 class="main-headline">Every Leaf Has a Name.</h1>
+        <p class="subtitle">Explore the hidden biodiversity of your region. Discover plants, birds, insects, and ecosystems — one sighting at a time.</p>
+        
+        <div class="discovery-search-box noise-texture">
+          <div class="search-top-row">
+            <div class="location-pill">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span>Nashik, Maharashtra</span>
+              <span class="green-dot"></span>
+            </div>
+            <div class="attribution-pill">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 7.05,10.62 11,10.62C14.5,10.62 17,8 17,8Z" /></svg>
+              <span>Powered by iNaturalist</span>
+            </div>
+          </div>
+          
+          <div class="main-input-area">
+            <input type="text" placeholder="Search species, plants, birds..." />
+            <button class="search-submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+          
+          <div class="search-bottom-row">
+            <div class="action-pills">
+              <button class="action-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                Nearby
+              </button>
+              <button class="action-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                Camera
+              </button>
+              <button class="action-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Rare Species
+              </button>
+            </div>
+            <div class="stats-text">2,400+ species documented</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Species Discovery Strip (peeking) -->
+      <div class="species-discovery-strip">
+        <div class="strip-track" id="strip-track">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <div id="scroll-indicator" class="scroll-indicator">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--fauna-cream)" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </header>
+
+    <div class="section-divider"><span>✦</span><span>✦</span><span>✦</span></div>
+
+    <!-- Interactive Map Section -->
+    <section class="boxed-map-section" id="map">
+      <div class="boxed-map-header">
+        <h2 class="map-headline">Explore Your Local Ecosystem</h2>
+        <p class="map-subtitle">Tap markers to discover species recorded in specific habitat zones.</p>
+      </div>
+
+      <div class="map-container noise-texture">
+        <div class="map-vignette"></div>
+        <div class="map-floating-search noise-texture">
+          <div class="glass-search-box">
+            <input type="text" placeholder="Search location..." />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--fauna-amber)" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+        </div>
+
+        <div id="leaflet-map"></div>
+        
+        <div class="habitat-legend-overlay">
+          <div class="legend-pill noise-texture" style="--tag-color: var(--fauna-moss);">Forest</div>
+          <div class="legend-pill noise-texture" style="--tag-color: #3a5a4a;">Wetland</div>
+          <div class="legend-pill noise-texture" style="--tag-color: #6b7a3a;">Grassland</div>
+          <div class="legend-pill noise-texture" style="--tag-color: #4a5a2a;">Urban Green</div>
+        </div>
+        
+        <!-- Sidebar Panel (hidden by default) -->
+        <div class="map-sidebar noise-texture" id="map-sidebar">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Feed Section -->
+    <section class="community-feed-section" id="feed">
+      <div class="feed-header">
+        <h2 class="section-title">Today's Sightings</h2>
+        <p class="section-subtitle">Live field notes and observations from the naturalist community.</p>
+      </div>
+      
+      <div class="newspaper-grid">
+        <!-- Main Featured Article -->
+        <article class="feed-featured noise-texture">
+          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=800&q=75" alt="Forest Canopy" class="featured-img" loading="lazy" />
+          <div class="article-content">
+            <div class="article-meta">2 HOURS AGO &bull; BANDIPUR RESERVE</div>
+            <h3 class="article-headline">Rare Malabar Giant Squirrel Sighted in Upper Canopy</h3>
+            <p class="article-excerpt">A breathtaking encounter captured during the early morning mist. Observer noted the specimen moving quickly through the terminal branches of a mature teak tree, vocalizing territorially before disappearing into the dense foliage.</p>
+            <div class="observer-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Observed by @dr_aranya
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondary Articles List -->
+        <div class="feed-secondary">
+          <article class="feed-item">
+            <h4 class="item-title">Blooming of the Neelakurinji</h4>
+            <div class="article-meta">5 HOURS AGO &bull; MUNNAR</div>
+            <p class="item-excerpt">The hillsides have erupted in purple. Early signs show a robust flowering season this year, drawing numerous pollinators.</p>
+          </article>
+          
+          <hr class="news-divider"/>
+          
+          <article class="feed-item">
+            <h4 class="item-title">Migratory Flocks Arrive Early</h4>
+            <div class="article-meta">YESTERDAY &bull; CHILIKA LAKE</div>
+            <p class="item-excerpt">Over 12,000 bar-headed geese recorded in the northern sector. The unusually early arrival may indicate harsher winter shifts up north.</p>
+          </article>
+
+          <hr class="news-divider"/>
+
+          <article class="feed-item">
+            <h4 class="item-title">Golden Jackal Pups Spotted</h4>
+            <div class="article-meta">2 DAYS AGO &bull; KANHA BUFFER</div>
+            <p class="item-excerpt">A family group successfully documented near the eastern watering hole just after dusk.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
